@@ -22,37 +22,23 @@ const app = express();
 app.use(cors({ origin: process.env.FRONTEND_ORIGIN || '*' }));
 app.use(express.json());
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, 'public')));
-
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: process.env.FRONTEND_ORIGIN || '*',
-    methods: ['GET', 'POST']
-  }
+  cors: { origin: process.env.FRONTEND_ORIGIN || '*', methods: ['GET', 'POST'] }
 });
 
 // attach io to every request
-app.use((req, _res, next) => {
-  req.io = io;
-  next();
-});
+app.use((req, _res, next) => { req.io = io; next(); });
 
 // API routes
 app.use('/auctions', auctionsRoutes);
 app.use('/bids', bidsRoutes);
 app.use('/notifications', notificationsRoutes);
 
-// Health check
+// health check
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
-// Fallback for SPA (send index.html)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Socket.io handlers
+// sockets: join rooms per auction
 io.on('connection', (socket) => {
   console.log('🔌 socket connected', socket.id);
   socket.on('join_auction', (auctionId) => {
@@ -63,6 +49,17 @@ io.on('connection', (socket) => {
   });
   socket.on('disconnect', () => console.log('🔌 socket disconnected', socket.id));
 });
+
+// Serve frontend in production
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, 'frontend', 'dist'); // adjust path if needed
+  app.use(express.static(buildPath));
+
+  // Catch-all to serve index.html for SPA
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, async () => {
