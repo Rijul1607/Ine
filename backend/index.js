@@ -4,6 +4,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import sequelize from './config/db.js';
 import './models/index.js';
 
@@ -13,25 +15,44 @@ import notificationsRoutes from './routes/notifications.js';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 app.use(cors({ origin: process.env.FRONTEND_ORIGIN || '*' }));
 app.use(express.json());
 
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'public')));
+
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: process.env.FRONTEND_ORIGIN || '*', methods: ['GET','POST'] } });
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_ORIGIN || '*',
+    methods: ['GET', 'POST']
+  }
+});
 
 // attach io to every request
-app.use((req, _res, next) => { req.io = io; next(); });
+app.use((req, _res, next) => {
+  req.io = io;
+  next();
+});
 
-// routes
+// API routes
 app.use('/auctions', auctionsRoutes);
 app.use('/bids', bidsRoutes);
 app.use('/notifications', notificationsRoutes);
 
-// health
+// Health check
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
-// sockets: join rooms per auction
+// Fallback for SPA (send index.html)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Socket.io handlers
 io.on('connection', (socket) => {
   console.log('🔌 socket connected', socket.id);
   socket.on('join_auction', (auctionId) => {
