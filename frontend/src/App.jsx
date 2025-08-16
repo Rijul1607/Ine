@@ -9,7 +9,7 @@ export default function App() {
       <Card className="w-full max-w-md shadow-lg rounded-2xl">
         <CardContent className="flex flex-col items-center space-y-6 p-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Auction MVP
+            Real Time Auction Platform
           </h1>
 
           <nav className="flex flex-col w-full gap-4">

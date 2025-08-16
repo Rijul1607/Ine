@@ -10,11 +10,11 @@ const redis = new Redis(process.env.UPSTASH_REDIS_URL, {
 });
 
 redis.on("connect", () => {
-  console.log("✅ Redis connected successfully");
+  console.log(" Redis connected successfully");
 });
 
 redis.on("error", (err) => {
-  console.error("❌ Redis connection error:", err);
+  console.error(" Redis connection error:", err);
 });
 
 export default redis;

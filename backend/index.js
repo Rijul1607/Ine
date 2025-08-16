@@ -68,9 +68,9 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ DB connected');
+    console.log(' DB connected');
   } catch (e) {
-    console.error('❌ DB connect error', e.message);
+    console.error(' DB connect error', e.message);
   }
-  console.log(`🚀 Server listening on ${PORT}`);
+  console.log(` Server listening on ${PORT}`);
 });
