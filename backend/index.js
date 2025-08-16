@@ -13,6 +13,7 @@ import auctionsRoutes from './routes/auctions.js';
 import bidsRoutes from './routes/bids.js';
 import notificationsRoutes from './routes/notifications.js';
 
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,6 +35,7 @@ app.use((req, _res, next) => { req.io = io; next(); });
 app.use('/auctions', auctionsRoutes);
 app.use('/bids', bidsRoutes);
 app.use('/notifications', notificationsRoutes);
+
 
 // health check
 app.get('/health', (_req, res) => res.json({ ok: true }));
