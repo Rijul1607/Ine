@@ -7,6 +7,7 @@ RUN npm install
 COPY frontend/ .
 
 # Pass Vite env variables at build time
+# ARG and ENV must be in a single line to be effective in a multi-line format.
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
 ARG VITE_API_BASE
@@ -30,3 +31,4 @@ COPY --from=frontend-build /app/frontend/dist ./public
 
 EXPOSE 8080
 CMD ["node", "index.js"]
+

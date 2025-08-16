@@ -50,12 +50,13 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => console.log('🔌 socket disconnected', socket.id));
 });
 
-// Serve frontend in production
+// Serve frontend in production (React/Vite build)
 if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.join(__dirname, 'frontend', 'dist'); // adjust path if needed
+  // Adjust path depending on where your build output is
+  const buildPath = path.join(__dirname, 'dist'); // or 'frontend/dist' if nested
   app.use(express.static(buildPath));
 
-  // Catch-all to serve index.html for SPA
+  // Catch-all route so SPA routing works
   app.get('*', (req, res) => {
     res.sendFile(path.join(buildPath, 'index.html'));
   });
