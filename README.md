@@ -7,6 +7,11 @@
 A **full-stack real-time auction system** that allows sellers to create auctions and buyers to place bids live. The system supports **real-time updates**, **bid validation**, and **highest bidder tracking**, making it ideal for online auction scenarios.
 
 ---
+## Demo Video
+
+<video src="https://github.com/user-attachments/assets/d27b31d6-2200-48e3-8068-b620b379ae9c" width="352" height="720"></video>
+
+---
 
 ## 🔹 Features
 
