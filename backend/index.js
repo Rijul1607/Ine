@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
 // Serve frontend in production (React/Vite build)
 if (process.env.NODE_ENV === 'production') {
   // Adjust path depending on where your build output is
-  const buildPath = path.join(__dirname, 'dist'); // or 'frontend/dist' if nested
+  const buildPath = path.join(__dirname, 'frontend/dist'); // or 'frontend/dist' if nested
   app.use(express.static(buildPath));
 
   // Catch-all route so SPA routing works
